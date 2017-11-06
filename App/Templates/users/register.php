@@ -10,13 +10,13 @@
     <div>
         <label>
             Password:
-            <input type="password" name="password"/>
+            <input type="text" name="password"/>
         </label>
     </div>
     <div>
         <label>
             Confirm Password:
-            <input type="password" name="confirm_password"/>
+            <input type="text" name="confirm_password"/>
         </label>
     </div>
     <div>
@@ -29,6 +29,12 @@
         <label>
             Last Name:
             <input type="text" name="last_name"/>
+        </label>
+    </div>
+    <div>
+        <label>
+            Born On:
+            <input type="text" name="born_on">
         </label>
     </div>
     <div>

@@ -23,13 +23,14 @@ class UserRepository implements UserRepositoryInterface
     public function insert(UserDTO $user): bool
     {
         $this->db->query(
-            "INSERT INTO `users`(username, password, first_name, last_name) 
-                    VALUES (?,?,?,?)
+            "INSERT INTO `users`(username, password, first_name, last_name,born_on) 
+                    VALUES (?,?,?,?,?)
         ")->execute([
             $user->getUsername(),
             $user->getPassword(),
             $user->getFirstName(),
-            $user->getLastName()
+            $user->getLastName(),
+	        $user->getBornOn()
         ]);
         return true;
     }
@@ -37,7 +38,7 @@ class UserRepository implements UserRepositoryInterface
     public function findOneByUsername(string $username): ?UserDTO
     {
        return $this->db->query("
-                   SELECT `id`,`username`,`password`,`first_name` AS firstName,`last_name` AS lastName
+                   SELECT `id`,`username`,`password`,`first_name` AS firstName,`last_name` AS lastName,`born_on` AS bornOn
                    FROM `users`
                    WHERE `username`=?
         ")
@@ -45,4 +46,49 @@ class UserRepository implements UserRepositoryInterface
             ->fetch(UserDTO::class)
             ->current();
     }
+
+	public function findOne( int $id ): ?UserDTO {
+		return $this->db->query("
+                   SELECT `id`,`username`,`password`,`first_name` AS firstName,`last_name` AS lastName,`born_on` AS bornOn
+                   FROM `users`
+                   WHERE `id`=?
+        ")
+		                ->execute([$id])
+		                ->fetch(UserDTO::class)
+		                ->current();
+	}
+
+	public function update( $id, UserDTO $user ): bool {
+		$stmt = $this->db->query("
+		   	        UPDATE `users`
+		   	        SET username = ?,
+		   	        password = ?,
+		   	        first_name = ?,
+		   	        last_name = ?,
+		   	        born_on = ?
+		   	        WHERE
+		   	        `id`=?
+		");
+		$stmt->execute([
+			$user->getUsername(),
+			$user->getPassword(),
+			$user->getFirstName(),
+			$user->getLastName(),
+			$user->getBornOn(),
+			$id
+		]);
+		return true;
+	}
+
+	/**
+	 * @return \Generator|UserDTO[]
+	 */
+	public function findAll(): \Generator {
+		return $this->db->query("
+			 SELECT `id`,`username`,`password`,`first_name` AS firstName,`last_name` AS lastName,`born_on` AS bornOn
+			 FROM `users`
+		")->execute()
+		  ->fetch(UserDTO::class);
+			
+	}
 }

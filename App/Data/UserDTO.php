@@ -39,14 +39,15 @@ class UserDTO
     /**
      * @var string
      */
-    private $registered;
+    private $bornOn;
 
-    public static function create($username,$password,$firstName,$lastName,$id = null){
+    public static function create($username,$password,$firstName,$lastName,$bornOn){
         $user = new UserDTO();
         $user->setUsername($username)
             ->setPassword($password)
             ->setFirstName($firstName)
-            ->setLastName($lastName);
+            ->setLastName($lastName)
+            ->setBornOn($bornOn);
         return $user;
     }
 
@@ -123,14 +124,14 @@ class UserDTO
     /**
      * @return string
      */
-    public function getRegistered(): string
+    public function getBornOn(): string
     {
-        return $this->registered;
+        return $this->bornOn;
     }
 
-    public function setRegistered(string $registered):UserDTO
+    public function setBornOn(string $bornOn):UserDTO
     {
-        $this->registered = $registered;
+        $this->bornOn = $bornOn;
         return $this;
     }
 
