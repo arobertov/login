@@ -1,10 +1,10 @@
 <?php
 include "common.php";
-
-$userRepository = new \App\Repository\UserRepository($db);
-
-$userService = new \App\Service\UserService($userRepository);
-
-$userHttpHandler = new \App\Http\UserHttpHandler($template);
-
-$userHttpHandler->allUsers($userService) ;
+try {
+	$userHttpHandler->allUsers( $userService );
+}catch (Exception $e){
+	echo "O'pss error";
+	echo '<a href="index.php">';
+	echo " go back";
+	echo '</a>';
+}

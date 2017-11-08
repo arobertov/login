@@ -29,7 +29,7 @@ class PDODatabase implements DatabaseInterface
 
     public function getLastError(): array
     {
-        // TODO: Implement getLastError() method.
+        return $this->pdo->errorInfo();
     }
 
 }

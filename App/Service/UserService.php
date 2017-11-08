@@ -21,15 +21,17 @@ class UserService implements UserServiceInterface
         $this->userRepository = $userRepository;
     }
 
+    /* -------------- Register new user -------------------------------- */
     public function register(UserDTO $userDTO, $confirmPassword): bool
     {
-        if($userDTO->getPassword() != $confirmPassword){
-            return false;
+    	/* --------------- check user exist ------------------- */
+	    if(null !== $this->userRepository->findOneByUsername($userDTO->getUsername())){
+            throw new \Exception('Username already exist !') ;
         }
-
-        if(null !== $this->userRepository->findOneByUsername($userDTO->getUsername())){
-            return false;
-        }
+	    /* --------------- check  password  confirm ------------ */
+	    if($userDTO->getPassword() != $confirmPassword){
+		    throw new \Exception('Password mishmash - try again !');
+	    }
 
         $plainPassword = trim($userDTO->getPassword());
         $passwordHash = password_hash($plainPassword,PASSWORD_BCRYPT);
@@ -43,14 +45,14 @@ class UserService implements UserServiceInterface
 	public function login( string $username, string $password ): ?UserDTO {
 		$user = $this->userRepository->findOneByUsername($username);
 		if($user === null){
-			return null;
+			throw new \Exception('Invalid user !');
 		}
 		$passwordHash = $user->getPassword();
 		if(password_verify($password,$passwordHash) === true){
 			return $user;
 		}
-		echo 'Tam';
-		return null ;
+
+		throw new \Exception('Invalid password !');
 	}
 
 	public function getCurrentUser():?UserDTO {

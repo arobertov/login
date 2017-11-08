@@ -22,22 +22,22 @@
     <div>
         <label>
             First Name:
-            <input type="text" name="first_name"/>
+            <input type="text" name="firstName"/>
         </label>
     </div>
     <div>
         <label>
             Last Name:
-            <input type="text" name="last_name"/>
+            <input type="text" name="lastName"/>
         </label>
     </div>
     <div>
         <label>
             Born On:
-            <input type="text" name="born_on">
+            <input type="text" name="bornOn">
         </label>
     </div>
     <div>
-        <input type="submit" name="register" value=" Register ">
+        <input type="submit" name="register" value=" Register !">
     </div>
 </form>

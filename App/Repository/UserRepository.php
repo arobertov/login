@@ -59,7 +59,7 @@ class UserRepository implements UserRepositoryInterface
 	}
 
 	public function update( $id, UserDTO $user ): bool {
-		$stmt = $this->db->query("
+		$stmt = $this->db->query( "
 		   	        UPDATE `users`
 		   	        SET username = ?,
 		   	        password = ?,
@@ -68,15 +68,15 @@ class UserRepository implements UserRepositoryInterface
 		   	        born_on = ?
 		   	        WHERE
 		   	        `id`=?
-		");
-		$stmt->execute([
-			$user->getUsername(),
-			$user->getPassword(),
-			$user->getFirstName(),
-			$user->getLastName(),
-			$user->getBornOn(),
-			$id
-		]);
+		" );
+		$stmt->execute( [
+			    $user->getUsername(),
+			    $user->getPassword(),
+			    $user->getFirstName(),
+			    $user->getLastName(),
+			    $user->getBornOn(),
+			    $id
+		    ] );
 		return true;
 	}
 

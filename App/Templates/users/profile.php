@@ -2,7 +2,7 @@
 
 <h1> Welcome <?= $data->getUsername() ?> you can edit your profile ! </h1>
 
-<form method="post">
+<form method="post" action="profile.php">
 	<div>
 		<label>
 			Username:
@@ -18,18 +18,18 @@
 	<div>
 		<label>
 			First Name:
-			<input type="text" name="first_name" value="<?=$data->getFirstName() ?>"/>
+			<input type="text" name="firstName" value="<?=$data->getFirstName() ?>"/>
 		</label>
 	</div>
 	<div>
 		<label>
 			Last Name:
-			<input type="text" name="last_name" value="<?=$data->getLastName() ?>"/>
+			<input type="text" name="lastName" value="<?=$data->getLastName() ?>"/>
 		</label>
 	</div>
     <label>
         Born On:
-        <input type="text" name="born_on" value="<?=$data->getBornOn() ?>">
+        <input type="text" name="bornOn" value="<?=$data->getBornOn() ?>">
     </label>
 	<div>
 		<input type="submit" name="edit" value=" Edit ">

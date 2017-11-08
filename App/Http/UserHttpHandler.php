@@ -27,11 +27,16 @@ class UserHttpHandler extends HttpHandlerAbstract
 		$this->render('users/all',$userService->viewAll());
 	}
 
+	/* ------------------ render user profile and update it -------------------- */
 	public function profile(UserServiceInterface $userService,array $formData=[]){
 		if(isset($formData['edit'])) {
-			$this->handleEditProcess( $userService, $formData );
+			try {
+				$this->handleEditProcess( $userService, $formData );
+			}catch (\Exception $e){
+				$this->render('app/error',new ErrorDTO($e->getMessage()));
+				exit;
+			}
 		}
-
 		$currentUser = $userService->getCurrentUser();
 		if($currentUser === null){
 			$this->redirect('login.php');
@@ -53,44 +58,36 @@ class UserHttpHandler extends HttpHandlerAbstract
     public function register(UserServiceInterface $userService,array $formData=[])
     {
         if(isset($formData['register'])){
-            $user =  UserDTO::create(
-                $formData['username'],
-                $formData['password'],
-                $formData['first_name'],
-                $formData['last_name'],
-                $formData['born_on']
-            );
-
-            if($userService->register($user,$formData['confirm_password']))
-            {
-            	$this->redirect('login.php');
-            } else{
-            	$this->render('app/error',new ErrorDTO('Cannot register, maybe username is already 
-                taken or password mismatch !'));
-            }
+            $this->handleRegisterProcess($userService,$formData);
         }else {
             $this->render('users/register');
         }
     }
 
+    private function handleRegisterProcess(UserServiceInterface $userService, array $formData): void
+    {
+	    $user = $this->dataBinder->bind($formData,UserDTO::class);
+	    try {
+		    $userService->register($user,$formData['confirm_password']);
+		    $this->redirect('login.php');
+	    }catch (\Exception $e){
+		    $this->render('app/error',new ErrorDTO($e->getMessage()));
+	    }
+    }
+
     private function handleLoginProcess(UserServiceInterface $userService,array $formData=[])
     {
-	    $loggedUser = $userService->login($formData['username'],$formData['password']);
-	    if(null !== $loggedUser){
+    	try{
+	        $loggedUser = $userService->login($formData['username'],$formData['password']);
 	    	$_SESSION['id'] = $loggedUser->getId();
 	    	$this->redirect('profile.php');
-	    } else{
-		    $this->render('app/error',new ErrorDTO('Username not exist or  password mismatch !')) ;
+	    } catch (\Exception $e){
+		    $this->render('app/error',new ErrorDTO($e->getMessage())) ;
 	    }
     }
 
     private function handleEditProcess(UserServiceInterface $userService,array $formData=[]){
-	    $user =  UserDTO::create(
-		    $formData['username'],
-		    $formData['password'],
-		    $formData['first_name'],
-		    $formData['last_name'],
-	        $formData['born_on']);
-	    $userService->editProfile($user);
+	    $user = $this->dataBinder->bind($formData,UserDTO::class);
+		    $userService->editProfile( $user );
     }
 }
